@@ -15,6 +15,9 @@ Route::get('/test', function (Request $request) {
     dd('test');
 });
 
+// Route to get all sites (domains)
+Route::get('/sites', [SiteController::class, 'index']);
+
 // Site routes
 Route::post('/site', [SiteController::class, 'store']);
 

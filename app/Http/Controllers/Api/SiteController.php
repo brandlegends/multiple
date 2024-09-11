@@ -8,6 +8,15 @@ use App\Http\Controllers\Controller;
 
 class SiteController extends Controller
 {
+
+    // Method to fetch all sites
+    public function index()
+    {
+        // Retrieve all sites and return them as JSON
+        $sites = Site::all();
+        return response()->json($sites);
+    }
+    
     public function store(Request $request)
     {
         $request->validate([
