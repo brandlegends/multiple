@@ -7,20 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['site_id', 'author_id', 'category_id', 'title', 'content', 'meta_title', 'meta_description'];
+    // Define the fillable fields for mass assignment
+    protected $fillable = [
+        'site_id', 'title', 'content', 'meta_title', 'meta_description',
+        'Author_name', 'Author_email', 'Author_image', 'category_name'
+    ];
 
+    // A post belongs to a site
     public function site()
     {
         return $this->belongsTo(Site::class);
-    }
-
-    public function author()
-    {
-        return $this->belongsTo(Author::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
 }

@@ -7,18 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $fillable = ['site_id', 'author_id', 'title', 'content', 'meta_title', 'meta_description', 'slug', 'parent_id'];
+    // Define the fillable fields for mass assignment
+    protected $fillable = [
+        'site_id', 'title', 'content', 'meta_title', 'meta_description',
+        'slug', 'parent_id', 'Author_name', 'Author_email', 'Author_image', 'category_name'
+    ];
 
+    // A page belongs to a site
     public function site()
     {
         return $this->belongsTo(Site::class);
     }
 
-    public function author()
-    {
-        return $this->belongsTo(Author::class);
-    }
-
+    // Self-referencing for hierarchical pages
     public function parent()
     {
         return $this->belongsTo(Page::class, 'parent_id');
