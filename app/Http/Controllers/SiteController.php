@@ -9,14 +9,37 @@ class SiteController extends Controller
     public function show(Request $request)
     {
         $domain = $request->getHost();
-        
-        // Find the site by domain
         $site = Site::where('domain', $domain)->firstOrFail();
 
-        // Load all posts related to this site
-        $posts = $site->posts;
+        $pathSegments = $request->segments(); // Get path like ['cars', 'mazda']
 
-        // Return the view with the site's posts
-        return view('site.show', compact('site', 'posts'));
+        $page = $this->findPageBySlug($site, $pathSegments);
+
+        if (!$page) {
+            return abort(404, 'Page not found');
+        }
+
+        return view('site.show', compact('site', 'page'));
+    }
+
+    private function findPageBySlug($site, $segments)
+    {
+        $page = null;
+
+        foreach ($segments as $slug) {
+            if (!$page) {
+                // First level: Look for a top-level page
+                $page = Page::where('site_id', $site->id)->where('slug', $slug)->whereNull('parent_id')->first();
+            } else {
+                // Subsequent levels: Look for a child page
+                $page = Page::where('site_id', $site->id)->where('slug', $slug)->where('parent_id', $page->id)->first();
+            }
+
+            if (!$page) {
+                return null; // No page found for the given slug
+            }
+        }
+
+        return $page;
     }
 }

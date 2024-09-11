@@ -7,5 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Site extends Model
 {
-    use HasFactory;
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function pages()
+    {
+        return $this->hasMany(Page::class);
+    }
 }
